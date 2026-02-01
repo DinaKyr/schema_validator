@@ -24,13 +24,13 @@ The validation_request.json provides a structure of
 
 schema_validator/
 ├── data/
-│ └── validation_request.json # Sample input provided
+│   └── validation_request.json       # Sample input provided
 ├── tests/
-│ └── validation_request.json # Test copy for grader security
-├── Dockerfile # Container environment setup
-├── task.yaml # Task configuration
-├── grader.py # Ground truth validator
-├── solution.sh # solution script
+│   └── validation_request.json       # Test copy for grader security
+├── Dockerfile                        # Container environment setup
+├── task.yaml                          # Task configuration
+├── grader.py                          # Ground truth validator
+├── solution.sh                        # Solution script
 ├── .gitignore
 └── README.md
 
