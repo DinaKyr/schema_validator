@@ -1,0 +1,252 @@
+{
+  "schemas": [
+    {
+      "schema_id": "schema_user",
+      "name": "User Profile Schema",
+      "schema": {
+        "type": "object",
+        "required": ["id", "username", "email", "age"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20,
+            "pattern": "^[a-zA-Z0-9_]+$"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 150
+          },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "user", "guest"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "schema_id": "schema_product",
+      "name": "Product Schema",
+      "schema": {
+        "type": "object",
+        "required": ["sku", "name", "price", "quantity"],
+        "properties": {
+          "sku": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}-[0-9]{4}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true,
+            "maxItems": 5
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "schema_id": "schema_order",
+      "name": "Order Schema",
+      "schema": {
+        "type": "object",
+        "required": ["order_id", "customer_email", "items", "total"],
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email"
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["product_name", "quantity", "unit_price"],
+              "properties": {
+                "product_name": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "unit_price": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "number",
+            "minimum": 0
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  ],
+  "documents": [
+    {
+      "document_id": "doc_001",
+      "schema_id": "schema_user",
+      "data": {
+        "id": 1,
+        "username": "john_doe",
+        "email": "john@example.com",
+        "age": 28,
+        "role": "admin"
+      }
+    },
+    {
+      "document_id": "doc_002",
+      "schema_id": "schema_user",
+      "data": {
+        "id": "not_an_integer",
+        "username": "ab",
+        "email": "invalid-email",
+        "age": 200,
+        "role": "superuser"
+      }
+    },
+    {
+      "document_id": "doc_003",
+      "schema_id": "schema_user",
+      "data": {
+        "id": 3,
+        "username": "valid_user",
+        "email": "valid@test.org"
+      }
+    },
+    {
+      "document_id": "doc_004",
+      "schema_id": "schema_product",
+      "data": {
+        "sku": "ABC-1234",
+        "name": "Widget Pro",
+        "price": 29.99,
+        "quantity": 100,
+        "tags": ["electronics", "gadgets"],
+        "active": true
+      }
+    },
+    {
+      "document_id": "doc_005",
+      "schema_id": "schema_product",
+      "data": {
+        "sku": "invalid-sku",
+        "name": "",
+        "price": 0,
+        "quantity": -5,
+        "tags": ["a", "b", "c", "d", "e", "f"],
+        "active": "yes"
+      }
+    },
+    {
+      "document_id": "doc_006",
+      "schema_id": "schema_product",
+      "data": {
+        "sku": "XYZ-9999",
+        "name": "Basic Item",
+        "price": 15.00,
+        "quantity": 50,
+        "tags": ["home", "home", "kitchen"]
+      }
+    },
+    {
+      "document_id": "doc_007",
+      "schema_id": "schema_order",
+      "data": {
+        "order_id": "550e8400-e29b-41d4-a716-446655440000",
+        "customer_email": "customer@shop.com",
+        "items": [
+          {
+            "product_name": "Laptop",
+            "quantity": 1,
+            "unit_price": 999.99
+          },
+          {
+            "product_name": "Mouse",
+            "quantity": 2,
+            "unit_price": 25.00
+          }
+        ],
+        "total": 1049.99,
+        "order_date": "2024-01-15"
+      }
+    },
+    {
+      "document_id": "doc_008",
+      "schema_id": "schema_order",
+      "data": {
+        "order_id": "not-a-uuid",
+        "customer_email": "bad-email",
+        "items": [],
+        "total": -50
+      }
+    },
+    {
+      "document_id": "doc_009",
+      "schema_id": "schema_order",
+      "data": {
+        "order_id": "123e4567-e89b-12d3-a456-426614174000",
+        "customer_email": "buyer@example.com",
+        "items": [
+          {
+            "product_name": "Keyboard",
+            "quantity": 0,
+            "unit_price": 75.00
+          }
+        ],
+        "total": 75.00
+      }
+    },
+    {
+      "document_id": "doc_010",
+      "schema_id": "schema_user",
+      "data": {
+        "id": 10,
+        "username": "extra_fields_user",
+        "email": "extra@test.com",
+        "age": 30,
+        "role": "user",
+        "extra_field": "not_allowed"
+      }
+    }
+  ]
+}

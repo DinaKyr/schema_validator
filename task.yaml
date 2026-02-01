@@ -1,0 +1,169 @@
+prompt: |
+  You are given a JSON validation task.
+
+  The input file is located at:
+    /workdir/data/validation_request.json
+
+  The input file contains:
+  {
+    "schemas": [
+      { "schema_id": "...", "schema": { ... } 
+      }, 
+      ...
+    ],
+    "documents": [
+      {
+        "document_id": "...",
+        "schema_id": "...",
+        "data": { ... }
+      },
+      ...
+    ]
+  }
+  Each document references a schema by `schema_id`.
+  All schemas may be used by multiple documents.
+
+  Your task is to validate the "data" value against the provided "schema".
+  You MUST implement ONLY the validation rules explicitly listed below.
+  No other JSON Schema features are required or expected.
+
+  ---1. TYPE VALIDATION---
+
+  Supported types and rules:
+  - string: value must be a string
+  - number: value must be an integer or float
+  - integer: value must be an integer (no decimals)
+  - boolean: value must be true or false
+  - null: value must be null
+  - array: value must be an array
+  - object: value must be an object
+
+
+  ---2. STRING CONSTRAINTS---
+
+  - minLength: string length >= value
+  - maxLength: string length <= value
+  - pattern: string must match the regex pattern
+  - format:
+      - email: valid email address
+      - date: YYYY-MM-DD format
+      - uuid: 8-4-4-4-12 hexadecimal format
+      - uri: must start with http:// or https://
+
+
+  ---3. NUMBER CONSTRAINTS---
+
+  - minimum: value >= minimum
+  - maximum: value <= maximum
+  - exclusiveMinimum: when true, value > minimum
+  - exclusiveMaximum: when true, value < maximum
+  - multipleOf: value must be divisible by this number
+
+  NOTE:
+  exclusiveMinimum and exclusiveMaximum follow JSON Schema Draft 4 behavior
+  and act as boolean modifiers.
+
+
+  ---4. ARRAY CONSTRAINTS---
+
+  - minItems: array length >= value
+  - maxItems: array length <= value
+  - uniqueItems: all elements must be unique
+  - items: each array element must validate against the given schema
+
+
+  ---5. OBJECT CONSTRAINTS---
+
+  - required: listed properties must exist
+  - properties: property schemas to validate
+  - additionalProperties:
+      - when false, no properties other than those listed in "properties" are allowed
+
+
+  ---6. ENUM CONSTRAINT---
+
+  - enum: value must be one of the listed values
+
+
+  ---ERROR HANDLING---
+
+  Your solution MUST handle all possible errors, including:
+
+  File/Input Errors:
+  - Input file not found
+  - Invalid JSON syntax
+  - Missing required fields ("schema" or "data")
+
+  Validation Errors:
+  - Type mismatch
+  - Missing required property
+  - Constraint violations as described above
+
+
+  ---ERROR OUTPUT FORMAT---
+
+  Each validation error MUST be reported as an object with the following fields:
+    {
+      "path": "$.fieldName", # Use $ for root, dot for object fields, brackets for array indices
+      "message": "Human-readable description",
+      "constraint": "constraintName", # Must match JSON Schema keyword exactly
+      "expected": "what was expected",
+      "actual": "what was found"
+    }
+
+
+  ---FINAL OUTPUT FORMAT---
+
+  {
+    "validation_results": [
+    {
+      "document_id": "string",
+      "schema_id": "string",
+      "valid": boolean,
+      "errors": [...] # List of error objects as defined above
+    },
+    ...
+
+    ],
+    "summary": {
+      "total_documents": integer,
+      "valid_documents": integer,
+      "invalid_documents": integer,
+      "total_errors": integer,
+      "errors_by_constraint": {
+        "type": integer,
+        "required": integer,
+        "format": integer,
+        "minimum": integer,
+        "pattern": integer,
+        "enum": integer,
+        "uniqueItems": integer,
+        "additionalProperties": integer
+      }
+    }
+  }
+
+
+  ---CONSTRAINTS---
+
+  - Use Python standard library only
+  - No external libraries
+  - Do not modify input files
+  - Do not write output files
+  - Do not print debug output
+
+metadata:
+  difficulty: hard
+  category: data_validation
+  required_tools:
+  - bash
+  - python
+  tags:
+  - json
+  - schema
+  - validation
+time_limit: 600
+memory_limit: 512
+max_agent_timeout_sec: 400
+expert_time_estimate_min: 25
+junior_time_estimate_min: 50
