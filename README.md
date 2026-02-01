@@ -39,16 +39,19 @@ schema_validator/
 {
   "validation_results": [
     {
-    "document_id": the document id,
-    "schema_id": the schema id,
-    "valid": true/false,
-    "errors": ["path": "$.path",
-               "message": Description,
-              "constraint": type of error,
-              "expected": excected value,
-              "actual": actual value given
-              ] ... or empty list if no errors
-    },...
+    "document_id": "<document id>",
+      "schema_id": "<schema id>",
+      "valid": true,
+      "errors": [
+          {
+            "path": "$.path",
+            "message": "<description>",
+            "constraint": "<type of error>",
+            "expected": "<expected value>",
+            "actual": "<actual value>"
+          } ... or empty list if no errors
+        ]
+    }, ...
   ],
   "summary": {
   "total_documents": int,
