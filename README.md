@@ -21,7 +21,7 @@ The validation_request.json provides a structure of
 ---
 
 ## Repository Structure
-
+```
 schema_validator/
 ├── data/
 │   └── validation_request.json       # Sample input provided
@@ -33,9 +33,9 @@ schema_validator/
 ├── solution.sh                        # Solution script
 ├── .gitignore
 └── README.md
-
+```
 # Produces the following validation shema
-
+```
 {
   "validation_results": [
     {
@@ -67,10 +67,12 @@ schema_validator/
     }
   }
 }
-
+```
 # Build Docker Image
 docker build -t schema-validator .
 
 Test with apex-arena tests
+
 ./apex-arena validate-task schema_validator
+
 ./apex-arena task-solution schema_validator
